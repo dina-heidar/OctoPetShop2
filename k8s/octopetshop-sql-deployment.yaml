@@ -17,11 +17,8 @@ spec:
           image: mcr.microsoft.com/mssql/server:2019-latest
           ports:
             - containerPort: 1433
-          env:
+           env:
             - name: SA_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: database-credentials
-                  key: sa-password
+              value: #{Project.SA.Password}
             - name: ACCEPT_EULA
               value: "Y"
