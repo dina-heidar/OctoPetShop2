@@ -1,0 +1,41 @@
+variable "GitHub.Repo.Name" {
+    value "dina-heidar/OctoPetShop2" {
+        environment = ["development"]
+    }
+}
+
+variable "K8.Shopping.Cart.ClusterIP" {
+    value "k8s/octopetshop-shoppingcart-cluster-ip-service.yaml" {
+        environment = ["development"]
+    }
+}
+
+variable "K8.Shopping.Cart.Deployment" {
+    value "k8s/octopetshop-shoppingcartservice-deployment.yaml" {
+        environment = ["development"]
+    }
+}
+
+variable "K8.Sql.Server.ClusterIP" {
+    value "k8s/octopetshop-sqlserver-cluster-ip-service.yaml" {
+        environment = ["development"]
+    }
+}
+
+variable "K8.Sql.Server.Deployment" {
+    value "k8s/octopetshop-sql-deployment.yaml" {
+        environment = ["development"]
+    }
+}
+
+variable "Project.Kubernetes.LoadBalancer.ExternalIp" {
+    value "192.168.86.47" {
+        environment = ["development"]
+    }
+}
+
+variable "Project.Kubernetes.Namespace" {
+    value "dina-heidar-dev" {
+        environment = ["development"]
+    }
+}
