@@ -1,0 +1,29 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: octopetshop-dbup
+spec:
+  template:
+    spec: 
+      securityContext:
+        fsGroupChangePolicy: OnRootMismatch
+      volumes:
+        - name: temp
+          emptyDir: {}
+      containers:
+        - name: dbup
+          image: octopussamples/octopetshop-database                   
+          command:
+            - dotnet
+            - run
+            - '--no-launch-profile'
+          volumeMounts:
+            - mountPath: /temp
+              name: temp
+          env:
+            - name: DbUpConnectionString
+              valueFrom:
+                secretKeyRef:
+                  name: database-credentials
+                  key: connectionstring
+      restartPolicy: Never

@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mssql
+spec:
+  serviceName: mssql
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mssql
+      app.kubernetes.io/name: mssql
+  template:
+    metadata:
+      labels:
+        app: mssql
+        app.kubernetes.io/name: mssql
+    spec:
+      terminationGracePeriodSeconds: 30
+      hostname: mssqlinst
+      securityContext:
+        fsGroupChangePolicy: OnRootMismatch    
+      containers:
+        - name: mssql
+          image: 'mcr.microsoft.com/mssql/server:2022-latest'
+          ports:
+            - containerPort: 1433
+              name: tcpsql
+          securityContext:
+            capabilities:
+              add:
+                - NET_BIND_SERVICE
+          env:
+            - name: MSSQL_SA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: database-credentials
+                  key: sa-password
+            - name: ACCEPT_EULA
+              value: 'Y'
+            - name: MSSQL_PID
+              value: Developer
+          resources:
+            requests:
+              memory: 2G
+              cpu: 2000m
+            limits:
+              memory: 2G
+              cpu: 2000m
+          volumeMounts:
+            - name: mssql-data
+              mountPath: /var/opt/mssql
+  volumeClaimTemplates:
+    - metadata:
+        name: mssql-data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        storageClassName: gp3
+        resources:
+          requests:
+            storage: 8Gi
